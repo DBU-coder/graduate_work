@@ -1,0 +1,69 @@
+
+<div class="table-responsive">
+    <table class="table table-bordered align-middle">
+        <tbody>
+        <tr>
+            <td>Артикул</td>
+            <td>{{ product.sku }}</td>
+        </tr>
+        <tr>
+            <td>Статус</td>
+            {% if product.status == "running_out" %}
+            <td style="color: #ffc107;">заканчивается</td>
+            {% elif product.status == "in_stock" %}
+            <td style="color: green;">в наличии</td>
+            {% elif product.status == "out_stock" %}
+            <td style="color: red;">нет в наличии</td>
+            {% else %}
+            <td style="color: grey;">ожидается</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>Сезон</td>
+            <td>{{ product.season }}</td>
+        </tr>
+
+        <tr>
+            <td>Страна производитель</td>
+            <td>{{ product.prod_country }}</td>
+
+        </tr>
+        <tr>
+            <td>Год</td>
+            <td>{{ product.prod_year }}</td>
+        </tr>
+        <tr>
+            <td>Тип Т/С</td>
+            <td>{{ product.vehicle_type }}</td>
+        </tr>
+        <tr>
+            <td>Ширина</td>
+            <td>{{ product.width }}</td>
+        </tr>
+        <tr>
+            <td>Профиль</td>
+            <td>{{ product.profile }}</td>
+        </tr>
+        <tr>
+            <td>Диаметр</td>
+            <td>{{ product.diameter }}</td>
+        </tr>
+        <tr>
+            <td>Индекс скорости</td>
+            <td>{{ product.speed_index }}</td>
+        </tr>
+        <tr>
+            <td>Индекс нагрузки</td>
+            <td>{{ product.load_index }}</td>
+        </tr>
+        <tr>
+            <td>Шипы</td>
+            <td>{{ product.spikes }}</td>
+        </tr>
+        <tr>
+            <td>Тип протектора</td>
+            <td>{{ product.protector_type }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

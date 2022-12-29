@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+		<!--start slider section-->
+		<section class="slider-section">
+			<div class="first-slider">
+				<div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+					<ol class="carousel-indicators">
+						<li data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active"></li>
+						<li data-bs-target="#carouselExampleDark" data-bs-slide-to="1"></li>
+						<li data-bs-target="#carouselExampleDark" data-bs-slide-to="2"></li>
+					</ol>
+					<div class="carousel-inner">
+						<div class="carousel-item active bg-dark-gery">
+							<div class="row d-flex align-items-center">
+								<div class="col d-none d-lg-flex justify-content-center">
+									<div class="">
+										<h3 class="h3 fw-light">Не забудь!</h3>
+										<h1 class="h1 title-carousel">Зимние шины</h1>
+										<p class="pb-3">Все размеры, с шипами, известные бренды.</p>
+										<div class=""> <a class="btn btn-dark btn-ecomm" href="category/tires/">Выбрать <i class='bx bx-chevron-right'></i></a>
+										</div>
+									</div>
+								</div>
+								<div class="col">
+									<img src="{% static 'mainapp/assets/images/slider/banner1.jpg' %}" class="img-fluid" alt="...">
+								</div>
+							</div>
+						</div>
+						<div class="carousel-item bg-dark-gery">
+							<div class="row d-flex align-items-center">
+								<div class="col d-none d-lg-flex justify-content-center">
+									<div class="">
+										<h3 class="h3 fw-light">Шины со скидкой!</h3>
+										<h1 class="h1 title-carousel">Шины для разных условий</h1>
+										<p class="pb-3">Зимние, летние, всесезонные...</p>
+										<div class=""> <a class="btn btn-dark btn-ecomm" href="category/tires/">Выбрать <i class='bx bx-chevron-right'></i></a>
+										</div>
+									</div>
+								</div>
+								<div class="col">
+									<img src="{% static 'mainapp/assets/images/slider/banner2.jpg' %}" class="img-fluid" alt="...">
+								</div>
+							</div>
+						</div>
+						<div class="carousel-item bg-dark-gery">
+							<div class="row d-flex align-items-center">
+								<div class="col d-none d-lg-flex justify-content-center">
+									<div class="">
+										<h3 class="h3 fw-light">Не забудь диски!</h3>
+										<h1 class="h1 title-carousel">Диски на разные авто</h1>
+										<p class="pb-3">Литые, стальные, все размеры.</p>
+										<div class=""> <a class="btn btn-dark btn-ecomm" href="category/rims/">Выбрать <i class='bx bx-chevron-right'></i></a>
+										</div>
+									</div>
+								</div>
+								<div class="col">
+									<img src="{% static 'mainapp/assets/images/slider/banner3.jpg' %}" class="img-fluid" alt="...">
+								</div>
+							</div>
+						</div>
+					</div>
+					<a class="carousel-control-prev" href="#carouselExampleDark" role="button" data-bs-slide="prev">	<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Previous</span>
+					</a>
+					<a class="carousel-control-next" href="#carouselExampleDark" role="button" data-bs-slide="next">	<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Next</span>
+					</a>
+				</div>
+			</div>
+		</section>
+		<!--end slider section-->
+		<!--start page wrapper -->
+		<div class="page-wrapper">
+			<div class="page-content">
+				<!--start information-->
+				<section class="py-3 border-top border-bottom">
+					<div class="container">
+						<div class="row row-cols-1 row-cols-lg-3 row-group align-items-center">
+							<div class="col">
+								<div class="d-flex align-items-center p-3 bg-white">
+									<div class="fs-1"><i class='bx bx-check-shield'></i>
+									</div>
+									<div class="info-box-content ps-3">
+										<h6 class="mb-0">1 ГОД</h6>
+										<p class="mb-0">Расширенной гарантии</p>
+									</div>
+								</div>
+							</div>
+							<div class="col">
+								<div class="d-flex align-items-center p-3 bg-white">
+									<div class="fs-1"><i class='bx bx-dollar-circle'></i>
+									</div>
+									<div class="info-box-content ps-3">
+										<h6 class="mb-0">14 ДНЕЙ</h6>
+										<p class="mb-0">на обмен или возврат</p>
+									</div>
+								</div>
+							</div>
+							<div class="col">
+								<div class="d-flex align-items-center p-3 bg-white">
+									<div class="fs-1"><i class='bx bx-buildings'></i>
+									</div>
+									<div class="info-box-content ps-3">
+										<h6 class="mb-0">СВОИ СКЛАДЫ</h6>
+										<p class="mb-0">в Киеве, Харькове, Одессе, Львове и Днепре</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--end row-->
+					</div>
+				</section>
+				<!--end information-->
+				<!--start pramotion-->
+				<section class="py-4">
+					<div class="container">
+						<div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3">
+							{% for cat in cats %}
+							<div class="col">
+								<div class="card rounded-0 border shadow-none">
+									<div class="row g-0 align-items-center">
+										<div class="col">
+											<img src="assets/images/promo/01.png" class="img-fluid" alt="" />
+										</div>
+										<div class="col">
+											<div class="card-body">
+												<h5 class="card-title text-uppercase">{{ cat.name }}</h5>
+												<p class="card-text text-uppercase">от 1500 грн.</p>	<a href="{{ cat.get_absolute_url }}" class="btn btn-dark btn-ecomm">Выбрать</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							{% endfor %}
+						</div>
+						<!--end row-->
+					</div>
+				</section>
+				<!--end pramotion-->
+				<!--start Featured product-->
+				<section class="py-4">
+					<div class="container">
+						<div class="d-flex align-items-center">
+							<h5 class="text-uppercase mb-0">ПОСЛЕДНИЕ ПОСТУПЛЕНИЯ</h5>
+						</div>
+						<hr/>
+						<div class="product-grid">
+							<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+
+								{% for l_prod in latest_products %}
+								<div class="col">
+									<div class="card rounded-0 product-card">
+										<div class="card-header bg-transparent border-bottom-0">
+											<div class="d-flex align-items-center justify-content-end gap-3">
+												<a href="javascript:;">
+													<div class="product-compare"><span><i class='bx bx-git-compare'></i> Compare</span>
+													</div>
+												</a>
+												<a href="javascript:;">
+													<div class="product-wishlist"> <i class='bx bx-heart'></i>
+													</div>
+												</a>
+											</div>
+										</div>
+										<a href="{{ l_prod.get_absolute_url }}">
+											<img src="{{ l_prod.image.url }}" class="card-img-top" alt="...">
+										</a>
+										<div class="card-body">
+											<div class="product-info">
+												<a href="{{ l_prod.category.get_absolute_url }}">
+													<p class="product-catergory font-13 mb-1">{{ l_prod.category }}</p>
+												</a>
+												<a href="{{ l_prod.get_absolute_url }}">
+													<h6 class="product-name mb-2">{{ l_prod.brand }} {{ l_prod.model }}</h6>
+												</a>
+												<div class="d-flex align-items-center">
+													<div class="mb-1 product-price">
+														<span class="fs-5">{{ l_prod.price }} грн.</span>
+													</div>
+													<div class="cursor-pointer ms-auto">
+														<i class="bx bxs-star text-warning"></i>
+														<i class="bx bxs-star text-warning"></i>
+														<i class="bx bxs-star text-warning"></i>
+														<i class="bx bxs-star text-warning"></i>
+														<i class="bx bxs-star text-warning"></i>
+													</div>
+												</div>
+												<div class="product-action mt-2">
+													<div class="d-grid gap-2">
+														<a href="{% url 'add_to_cart' ct_model=l_prod.get_model_name slug=l_prod.slug %}" class="btn btn-dark btn-ecomm">	<i class='bx bxs-cart-add'></i>Добавить в корзину</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+							</div>
+							<!--end row-->
+						</div>
+					</div>
+				</section>
+				<!--end Featured product-->
+
+{% endblock content %}

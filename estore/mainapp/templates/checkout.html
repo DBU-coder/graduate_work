@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block content %}
+<!--start breadcrumb-->
+<section class="py-3 border-bottom border-top d-none d-md-flex bg-dark bg-gradient">
+    <div class="container">
+        <div class="page-breadcrumb d-flex align-items-center">
+            <h3 class="breadcrumb-title pe-3">Оформление заказа</h3>
+            <div class="ms-auto">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="bx bx-home-alt"></i>
+                            Главная</a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="{% url 'cart' %}">Корзина</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Оформление заказа</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!--end breadcrumb-->
+<!--start shop cart-->
+<section class="py-4">
+    <div class="container">
+        <div class="shop-cart">
+            <div class="row">
+                <div class="col-12 col-xl-8">
+                    <div class="checkout-details">
+                        <div class="card rounded-0">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="">
+                                        <img src="assets/images/avatars/avatar-1.png" width="90" alt=""
+                                             class="rounded-circle p-1 border">
+                                    </div>
+                                    <div class="ms-2">
+                                        <h6 class="mb-0">{{ cart.owner }}</h6>
+                                        <p class="mb-0">{{ cart.owner.user.email }}</p>
+                                    </div>
+                                </div>
+                                <div class="border p-3">
+                                    <h2 class="h5 mb-0">Детали заказа</h2>
+                                    <div class="my-3 border-bottom"></div>
+                                    <div class="form-body">
+                                        <form action="{% url 'make_order' %}" method="post" class="row g-3">
+                                            {% csrf_token %}
+                                            <div class="col-md-6">
+                                                <label for="{{ form.first_name.id_for_label }}" class="form-label">{{ form.first_name.label }}</label>
+                                                {{ form.first_name }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="{{ form.last_name.id_for_label }}" class="form-label">{{ form.last_name.label }}</label>
+                                                {{ form.last_name }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="{{ form.phone.id_for_label }}" class="form-label">{{ form.phone.label }}</label>
+                                                {{ form.phone }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="{{ form.buying_type.id_for_label }}" class="form-label">{{ form.buying_type.label }}</label>
+                                                {{ form.buying_type }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="{{ form.address.id_for_label }}" class="form-label">{{ form.address.label }}</label>
+                                                {{ form.address }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="{{ form.comment.id_for_label }}" class="form-label">{{ form.comment.label }}</label>
+                                                {{ form.comment }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="{{ form.order_date.id_for_label }}" class="form-label">{{ form.order_date.label }}</label>
+                                                {{ form.order_date }}
+                                            </div>
+                                            <div class="my-3 border-bottom"></div>
+                                            <div class="col-md-6">
+                                                <div class="d-grid">
+                                                    <a href="{% url 'cart' %}" class="btn btn-light btn-ecomm">
+                                                        <i class='bx bx-chevron-left'></i>Вернутся в корзину</a>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="d-grid">
+                                                    <button type="submit" class="btn btn-dark btn-ecomm">Оформить заказ  <i class='bx bx-chevron-right'></i></button>
+
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-4">
+                    <div class="order-summary">
+                        <div class="card rounded-0">
+                            <div class="card-body">
+
+                                <div class="card rounded-0 border bg-transparent shadow-none">
+                                    <div class="card-body">
+                                        <p class="fs-5">Итог заказа</p>
+                                        <div class="my-3 border-top"></div>
+                                        {% for item in cart.products.all %}
+                                        <div class="d-flex align-items-center">
+                                            <a class="d-block flex-shrink-0" href="javascript:;">
+                                                <img src="{{ item.content_object.image.url }}" width="75" alt="Product">
+                                            </a>
+                                            <div class="ps-2">
+                                                <h6 class="mb-1"><a href="javascript:;" class="text-dark">{{ item.content_object.title }}</a></h6>
+                                                <div class="widget-product-meta"><span class="me-2">{{ item.content_object.price }}</span>
+                                                    <span class="">x {{ item.qty }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="my-3 border-top"></div>
+                                        {% endfor %}
+
+                                    </div>
+                                </div>
+                                <div class="card rounded-0 border bg-transparent mb-0 shadow-none">
+                                    <div class="card-body">
+                                        <p class="mb-2">Количество: <span
+                                                class="float-end">{{ cart.total_products }} шт</span></p>
+                                        <h5 class="mb-0">К оплате: <span
+                                                class="float-end">{{ cart.final_price }} грн.</span></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end row-->
+        </div>
+    </div>
+</section>
+<!--end shop cart-->
+{% endblock content %}

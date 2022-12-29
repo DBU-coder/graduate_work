@@ -1,0 +1,236 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--favicon-->
+    <link rel="icon" href="{% static 'mainapp/assets/images/favicon-32x32.png' %}" type="image/png"/>
+    <!--plugins-->
+    <link href="{% static 'mainapp/assets/plugins/OwlCarousel/css/owl.carousel.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'mainapp/assets/plugins/simplebar/css/simplebar.css' %}" rel="stylesheet"/>
+    <link href="{% static 'mainapp/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css' %}" rel="stylesheet"/>
+    <link href="{% static 'mainapp/assets/plugins/metismenu/css/metisMenu.min.css' %}" rel="stylesheet"/>
+    <!-- loader-->
+    <link href="{% static 'mainapp/assets/css/pace.min.css' %}" rel="stylesheet"/>
+    <script src="{% static 'mainapp/assets/js/pace.min.js' %}"></script>
+    <!-- Bootstrap CSS -->
+    <link href="{% static 'mainapp/assets/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="{% static 'mainapp/assets/css/app.css' %}" rel="stylesheet">
+    <link href="{% static 'mainapp/assets/css/icons.css' %}" rel="stylesheet">
+    <title>Tyres&Rims|{{ title }}</title>
+</head>
+
+<body>
+
+<b class="screen-overlay"></b>
+<!--wrapper-->
+<div class="wrapper">
+    <div class="discount-alert d-none d-lg-block">
+        <div class="alert alert-dismissible fade show shadow-none rounded-0 mb-0 border-bottom">
+            <div class="d-lg-flex align-items-center gap-2 justify-content-center">
+                <p class="mb-0"><strong>Букреев Дмитрий</strong> Дипломная работа Группа "Р-26" <strong>Интернет-магазин "Шины и Диски"</strong></p>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+    <!--start top header wrapper-->
+    <div class="header-wrapper">
+        <div class="header-content pb-3 pb-md-0">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-4 col-md-auto">
+                        <div class="d-flex align-items-center">
+                            <div class="mobile-toggle-menu d-lg-none px-lg-2" data-trigger="#navbar_main"><i
+                                    class='bx bx-menu'></i>
+                            </div>
+                            <div class="logo d-none d-lg-flex">
+                                <a href="index.html">
+                                    <img src="assets/images/logo-icon.png" class="logo-icon" alt=""/>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-md order-4 order-md-2">
+                        <form action="{% url 'search_results' %}">
+                            <div class="input-group flex-nowrap px-xl-4">
+                                <input type="search" name="search_title" class="form-control w-100" placeholder="Поиск по названию товара...">
+                                <select name="category" class="form-select flex-shrink-0" aria-label="Default select example"
+                                        style="width: 10.5rem;">
+                                    <option selected value="">Все категории</option>
+                                    <option value="rims">Диски</option>
+                                    <option value="tires">Шины</option>
+                                </select>
+                               <button type="submit" class="input-group-text cursor-pointer bg-transparent"><i class='bx bx-search'></i></button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-4 col-md-auto order-3 d-none d-xl-flex align-items-center">
+                        <div class="fs-1 text-white"><i class='bx bx-headphone'></i>
+                        </div>
+                        <div class="ms-2">
+                            <p class="mb-0 font-13">ПОЗВОНИ НАМ</p>
+                            <h5 class="mb-0"><i class='bx bx-phone'></i> +38 099 9991111</h5>
+                        </div>
+                    </div>
+                    <div class="col-4 col-md-auto order-2 order-md-4">
+                        <div class="top-cart-icons float-end">
+                            <nav class="navbar navbar-expand">
+                                <ul class="navbar-nav ms-auto">
+                                    {% if user.is_authenticated %}
+                                        <li class="nav-item pt-3">
+                                            <a href="#" class="nav-link ">Привет, <strong>{{ user.username }}</strong></a>
+                                        </li>
+                                        <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link cart-link"><i
+                                                class='bx bx-exit'></i></a>
+                                        </li>
+                                    {% else %}
+                                    <li class="nav-item"><a href="{% url 'login' %}" class="nav-link cart-link"><i
+                                            class='bx bx-user'></i></a>
+                                    {% endif %}
+                                    <li class="nav-item dropdown dropdown-large">
+                                        <a href="{% url 'cart' %}"
+                                           class="nav-link position-relative cart-link"> <span class="alert-count">{{ cart.products.count }}</span>
+                                            <i class='bx bx-cart'></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <!--end row-->
+            </div>
+        </div>
+        <div class="primary-menu border-top">
+            <div class="container">
+                <nav id="navbar_main" class="mobile-offcanvas navbar navbar-expand-lg">
+                    <div class="offcanvas-header">
+                        <button class="btn-close float-end"></button>
+                        <h5 class="py-2">Навигация</h5>
+                    </div>
+                    <ul class="navbar-nav">
+                        <li class="nav-item active"><a class="nav-link" href="{% url 'home' %}">Домой </a>
+                        </li>
+                        {% for cat in cats %}
+                        <li class="nav-item"><a class="nav-link" href="{{ cat.get_absolute_url }}">{{ cat.name }}</a>
+                        </li>
+                        {% endfor %}
+
+                        {% for m in menu %}
+                        <li class="nav-item"><a class="nav-link" href="#">{{ m.name }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!--end top header wrapper-->
+    <!--start page wrapper -->
+    <div class="page-wrapper">
+        <div class="page-content">
+            {% block content %}
+
+            {% endblock content %}
+        </div>
+    </div>
+    <!--end page wrapper -->
+
+    <!--start footer section-->
+    <footer>
+        <section class="py-4 border-top bg-light">
+            <div class="container">
+                <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-4">
+                    <div class="col">
+                        <div class="footer-section1 mb-3">
+                            <h6 class="mb-3 text-uppercase">Контакты</h6>
+                            <div class="address mb-3">
+                                <p class="mb-0 text-uppercase">Адрес</p>
+                                <p class="mb-0 font-12">Украина, г. Киев, ул. Крещатик, 26</p>
+                            </div>
+                            <div class="phone mb-3">
+                                <p class="mb-0 text-uppercase">Телефон</p>
+                                <p class="mb-0 font-13">Vodafon : +38 099 9991111</p>
+                            </div>
+                            <div class="email mb-3">
+                                <p class="mb-0 text-uppercase">Email</p>
+                                <p class="mb-0 font-13">bukrieiev@google.com</p>
+                            </div>
+                            <div class="working-days mb-3">
+                                <p class="mb-0 text-uppercase">Прием заказов</p>
+                                <p class="mb-0 font-13">Круглосуточно</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="footer-section2 mb-3">
+                            <h6 class="mb-3 text-uppercase">Товары</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-1"><a href="#"><i class='bx bx-chevron-right'></i> Шины</a>
+                                </li>
+                                <li class="mb-1"><a href="#"><i class='bx bx-chevron-right'></i> Диски</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="footer-section3 mb-3">
+                            <h6 class="mb-3 text-uppercase">Популярные запросы</h6>
+                            <div class="tags-box">
+                                <a href="javascript:;" class="tag-link">Диски</a>
+                                <a href="javascript:;" class="tag-link">R16</a>
+                                <a href="javascript:;" class="tag-link">Зимние</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="footer-section4 mb-3">
+                            <h6 class="mb-3 text-uppercase">Будь в курсе</h6>
+                            <div class="subscribe">
+                                <input type="text" class="form-control radius-30" placeholder="Введите Email"/>
+                                <div class="mt-2 d-grid"><a href="javascript:;"
+                                                            class="btn btn-dark btn-ecomm radius-30">Подписаться</a>
+                                </div>
+                                <p class="mt-2 mb-0 font-13">Подписка на нашу почтовую рассылку</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end row-->
+                <hr/>
+                <div class="row row-cols-1 row-cols-md-2 align-items-center">
+                    <div class="col">
+                        <p class="mb-0">Copyright © 2022. Dmitro Bukrieiev. P-26. All right reserved.</p>
+                    </div>
+                </div>
+                <!--end row-->
+            </div>
+        </section>
+    </footer>
+    <!--end footer section-->
+
+    <!--Start Back To Top Button-->
+    <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+    <!--End Back To Top Button-->
+</div>
+<!--end wrapper-->
+
+<!-- Bootstrap JS -->
+<script src="{% static 'mainapp/assets/js/bootstrap.bundle.min.js' %}"></script>
+<!--plugins-->
+<script src="{% static 'mainapp/assets/js/jquery.min.js' %}"></script>
+<script src="{% static 'mainapp/assets/plugins/simplebar/js/simplebar.min.js' %}"></script>
+<script src="{% static 'mainapp/assets/plugins/OwlCarousel/js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'mainapp/assets/plugins/OwlCarousel/js/owl.carousel2.thumbs.min.js' %}"></script>
+<script src="{% static 'mainapp/assets/plugins/metismenu/js/metisMenu.min.js' %}"></script>
+<script src="{% static 'mainapp/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js' %}"></script>
+<!--app JS-->
+<script src="{% static 'mainapp/assets/js/app.js' %}"></script>
+<script src="{% static 'mainapp/assets/js/index.js' %}"></script>
+</body>
+
+</html>

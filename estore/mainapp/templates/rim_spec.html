@@ -1,0 +1,64 @@
+<div class="table-responsive">
+    <table class="table table-bordered align-middle">
+        <tbody>
+        <tr>
+            <td>Артикул</td>
+            <td>{{ product.sku }}</td>
+        </tr>
+        <tr>
+            <td>Статус</td>
+            {% if product.status == "running_out" %}
+                    <td style="color: #ffc107;">заканчивается</td>
+                {% elif product.status == "in_stock" %}
+                    <td style="color: green;">в наличии</td>
+                {% elif product.status == "out_stock" %}
+                    <td style="color: red;">нет в наличии</td>
+                {% else %}
+                    <td style="color: grey;">ожидается</td>
+                {% endif %}
+        </tr>
+        <tr>
+            <td>Цвет</td>
+            <td>{{ product.color }}</td>
+        </tr>
+
+        <tr>
+            <td>Тип диска</td>
+            <td>{{ product.type }}</td>
+
+        </tr>
+        <tr>
+            <td>Диаметр</td>
+            <td>{{ product.diameter }}</td>
+        </tr>
+        <tr>
+            <td>Ширина диска</td>
+            <td>{{ product.width }}</td>
+        </tr>
+        <tr>
+            <td>ET</td>
+            <td>{{ product.et }}</td>
+        </tr>
+        <tr>
+            <td>DIA</td>
+            <td>{{ product.dia }}</td>
+        </tr>
+        <tr>
+            <td>PSD</td>
+            <td>{{ product.psd }}</td>
+        </tr>
+        <tr>
+            <td>Межболтовое расстояние</td>
+            <td>{{ product.bolt_spacing }}</td>
+        </tr>
+        <tr>
+            <td>Количество болтов</td>
+            <td>{{ product.bolts }}</td>
+        </tr>
+        <tr>
+            <td>Модель</td>
+            <td>{{ product.model }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
