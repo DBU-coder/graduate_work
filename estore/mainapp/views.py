@@ -11,7 +11,7 @@ from django.contrib import messages
 from .mixins import DataMixin, CartMixin, CategoryDetailMixin
 from .models import *
 from .forms import OrderForm, RegisterUserForm, LoginUserForm
-from .utils import recalc_cart
+from .utils import recalc_cart, create_cart
 
 # Create your views here.
 
@@ -67,10 +67,6 @@ class CategoryDetailView(CartMixin, CategoryDetailMixin, DetailView):
 		context['cart'] = self.cart
 		return context
 
-	# def get_queryset(self):
-	#
-	# 	return queryset
-
 
 class AddToCartView(CartMixin, View):
 
@@ -78,9 +74,16 @@ class AddToCartView(CartMixin, View):
 		ct_model, product_slug = kwargs.get('ct_model'), kwargs.get('slug')
 		content_type = ContentType.objects.get(model=ct_model)
 		product = content_type.model_class().objects.get(slug=product_slug)
-		cart_product, created = CartProduct.objects.get_or_create(
-			user=self.cart.owner, cart=self.cart, content_type=content_type, object_id=product.id,
-		)
+		data = {
+			'cart': self.cart,
+			'content_type': content_type,
+			'object_id': product.id
+		}
+		if request.user.is_authenticated:
+			data.update({'user': self.cart.owner})
+		else:
+			data.update({'session_key': request.session.session_key})
+		cart_product, created = CartProduct.objects.get_or_create(**data)
 		if created:
 			self.cart.products.add(cart_product)
 		recalc_cart(self.cart)
@@ -94,9 +97,16 @@ class DeleteFromCartView(CartMixin, View):
 		ct_model, product_slug = kwargs.get('ct_model'), kwargs.get('slug')
 		content_type = ContentType.objects.get(model=ct_model)
 		product = content_type.model_class().objects.get(slug=product_slug)
-		cart_product = CartProduct.objects.get(
-			user=self.cart.owner, cart=self.cart, content_type=content_type, object_id=product.id
-		)
+		data = {
+			'cart': self.cart,
+			'content_type': content_type,
+			'object_id': product.id
+		}
+		if request.user.is_authenticated:
+			data.update({'user': self.cart.owner})
+		else:
+			data.update({'session_key': request.session.session_key})
+		cart_product, created = CartProduct.objects.get_or_create(**data)
 		self.cart.products.remove(cart_product)
 		cart_product.delete()
 		recalc_cart(self.cart)
@@ -110,9 +120,16 @@ class ChangeQTYView(CartMixin, View):
 		ct_model, product_slug = kwargs.get('ct_model'), kwargs.get('slug')
 		content_type = ContentType.objects.get(model=ct_model)
 		product = content_type.model_class().objects.get(slug=product_slug)
-		cart_product = CartProduct.objects.get(
-			user=self.cart.owner, cart=self.cart, content_type=content_type, object_id=product.id
-		)
+		data = {
+			'cart': self.cart,
+			'content_type': content_type,
+			'object_id': product.id
+		}
+		if request.user.is_authenticated:
+			data.update({'user': self.cart.owner})
+		else:
+			data.update({'session_key': request.session.session_key})
+		cart_product, created = CartProduct.objects.get_or_create(**data)
 		qty = int(request.POST.get('qty'))
 		cart_product.qty = qty
 		cart_product.save()
@@ -207,7 +224,10 @@ class RegisterUser(CartMixin, DataMixin, CreateView):
 
 	def form_valid(self, form):
 		user = form.save()
+		Customer.objects.create(user=user, phone=form.cleaned_data['phone'], address=form.cleaned_data['address'])
 		login(self.request, user)
+		if self.request.session.get('cart_id'):
+			create_cart(self.request)
 		return redirect('home')
 
 
@@ -223,6 +243,8 @@ class LoginUser(CartMixin, DataMixin, LoginView):
 		return dict(list(context.items()) + list(c_def.items()))
 
 	def get_success_url(self):
+		if self.request.session.get('cart_id'):
+			create_cart(self.request)
 		return reverse_lazy('home')
 
 

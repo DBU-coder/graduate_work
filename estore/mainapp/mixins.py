@@ -1,3 +1,4 @@
+import uuid
 from django.views import View
 from django.views.generic.detail import SingleObjectMixin
 
@@ -47,23 +48,31 @@ class CartMixin(View):
 
 	# метод имеет доступ к request из которого берем user
 	def dispatch(self, request, *args, **kwargs):
-		if request.user.is_authenticated:
-			# Если авторизован, ищем покупателя и корзину.
+		cart = None
+		if request.user.is_authenticated and request.user.is_superuser:
+			# Если авторизован, ищем покупателя
 			customer = Customer.objects.filter(user=request.user).first()
-			cart = Cart.objects.filter(owner=customer, in_order=False).first()
+
 			if not customer:
 				customer = Customer.objects.create(user=request.user)
+			cart = Cart.objects.filter(owner=customer, in_order=False).first()
 			# Если корзина найдена, возвращаем корзину.
 			# Если нет, создаем её.
 			if not cart:
 				cart = Cart.objects.create(owner=customer)
+			self.cart = cart
 		else:
-			# Если не зарегистрирован, то проверяем есть ли у него корзина "заглушка"
-			cart = Cart.objects.filter(for_anonymous_user=True).first()
-			if not cart:
-				# если нет, создаем.
-				cart = Cart.objects.create(for_anonymous_user=True)
-		self.cart = cart
-		self.cart.save()
+			# Если не зарегистрирован и нет корзины, то создаем новую корзину с ключем сессии UUID.
+			if not request.session.get('cart_id'):
+				cart = Cart.objects.create(session_key=uuid.uuid4())
+				request.session['cart_id'] = cart.id
+				self.cart = cart
+			else:
+				try:
+					cart = Cart.objects.get(id=request.session['cart_id'])
+				except Cart.DoesNotExist:
+					cart = Cart.objects.create(session_key=uuid.uuid4())
+				self.cart = cart
+
 		# вызываем метод родителя с нашими изменениями
 		return super().dispatch(request, *args, **kwargs)

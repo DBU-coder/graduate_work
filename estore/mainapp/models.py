@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
@@ -139,12 +140,13 @@ class Rims(Product):
 
 
 class CartProduct(models.Model):
-	user = models.ForeignKey('Customer', verbose_name='Покупатель', on_delete=models.CASCADE)
+	user = models.ForeignKey('Customer', null=True, blank=True, verbose_name='Покупатель', on_delete=models.CASCADE)
 	cart = models.ForeignKey('Cart', verbose_name='Корзина', on_delete=models.CASCADE, related_name='related_products')
 	content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
 	object_id = models.PositiveIntegerField()
 	content_object = GenericForeignKey('content_type', 'object_id')
 	qty = models.PositiveIntegerField(default=1, verbose_name='Количество')
+	session_key = models.CharField(max_length=1024, verbose_name='Ключ сессии', null=True, blank=True)
 	final_price = models.DecimalField(max_digits=9, default=0, decimal_places=2, verbose_name='Общая цена')
 
 	def save(self, *args, **kwargs):
@@ -162,12 +164,12 @@ class Cart(models.Model):
 		verbose_name_plural = 'Корзины'
 		ordering = ['owner', 'id']
 
-	owner = models.ForeignKey('Customer', null=True, verbose_name='Владелец', on_delete=models.CASCADE)
+	owner = models.ForeignKey('Customer', null=True, blank=True, verbose_name='Владелец', on_delete=models.CASCADE)
 	products = models.ManyToManyField(CartProduct, blank=True, related_name='related_cart')
 	total_products = models.PositiveIntegerField(default=0)
 	final_price = models.DecimalField(max_digits=9, default=0, decimal_places=2, verbose_name='Общая цена')
 	in_order = models.BooleanField(default=False)
-	for_anonymous_user = models.BooleanField(default=False)
+	session_key = models.CharField(max_length=1024, verbose_name='Ключ сессии', null=True, blank=True)
 
 	def __str__(self):
 		return str(self.id)
@@ -179,10 +181,10 @@ class Customer(models.Model):
 		verbose_name_plural = 'Клиенты'
 		ordering = ['user']
 
-	user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
+	user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name='Пользователь', on_delete=models.CASCADE)
 	phone = models.CharField(max_length=20, null=True, blank=True, verbose_name='Номер телефона')
 	address = models.CharField(max_length=255, null=True, blank=True, verbose_name='Адрес')
-	orders = models.ManyToManyField('Order', verbose_name='Заказы покупателя', related_name='related_order')
+	orders = models.ManyToManyField('Order', null=True, blank=True, verbose_name='Заказы покупателя', related_name='related_order')
 
 	def __str__(self):
 		return f'Покупатель: {self.user.first_name} {self.user.last_name}'

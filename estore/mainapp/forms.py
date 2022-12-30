@@ -29,6 +29,15 @@ class OrderForm(forms.ModelForm):
 
 
 class RegisterUserForm(UserCreationForm):
+
+    phone = forms.CharField(
+        label='Телефон',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+3801234567'})
+    )
+    address = forms.CharField(
+        label='Адрес',
+        widget=forms.Textarea(attrs={'class': 'form-control'})
+    )
     password1 = forms.CharField(
         label='Пароль',
         widget=forms.PasswordInput(attrs={'class': 'form-control'})
@@ -40,7 +49,7 @@ class RegisterUserForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'password1', 'password2', 'email')
+        fields = ('username', 'first_name', 'last_name', 'password1', 'password2', 'email', 'phone', 'address')
 
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),

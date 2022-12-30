@@ -73,15 +73,9 @@
                                 </div>
                             </div>
                             <!--end row-->
-                            {% if user.authenticated %}
                             <div class="d-flex gap-2 mt-3">
                                 <a href="{% url 'add_to_cart' ct_model=ct_model slug=product.slug %}" class="btn btn-danger btn-ecomm"> <i class="bx bxs-cart-add"></i>Купить</a>
                             </div>
-                            {% else %}
-                            <div class="d-flex gap-2 mt-3">
-                                <a href="{% url 'login' %}" class="btn btn-dark btn-ecomm"> Войти</a>
-                            </div>
-							{% endif %}
                             <hr/>
                         </div>
                     </div>

@@ -94,10 +94,16 @@
                                         </a>
                                     </li>
                                     {% else %}
-                                    <li class="nav-item"><a href="{% url 'login' %}" class="nav-link cart-link"><i
-                                            class='bx bx-user'></i></a>
+                                    <li class="nav-item">
+                                        <a href="{% url 'login' %}" class="nav-link cart-link"><i class='bx bx-user'></i></a>
+                                    </li>
+                                    <li class="nav-item dropdown dropdown-large">
+                                        <a href="{% url 'cart' %}"
+                                           class="nav-link position-relative cart-link"> <span class="alert-count">{{ cart.products.count }}</span>
+                                            <i class='bx bx-cart'></i>
+                                        </a>
+                                    </li>
                                     {% endif %}
-
                                 </ul>
                             </nav>
                         </div>
