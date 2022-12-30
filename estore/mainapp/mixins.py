@@ -1,7 +1,7 @@
 from django.views import View
 from django.views.generic.detail import SingleObjectMixin
 
-from .models import Category, Cart, Customer, Tires, Rims
+from .models import Category, Cart, Customer, Tires, Rims, User
 
 menu = [
 	{'name': 'Доставка', 'url_name': 'shipping'},
@@ -51,6 +51,8 @@ class CartMixin(View):
 			# Если авторизован, ищем покупателя и корзину.
 			customer = Customer.objects.filter(user=request.user).first()
 			cart = Cart.objects.filter(owner=customer, in_order=False).first()
+			if not customer:
+				customer = Customer.objects.create(user=request.user)
 			# Если корзина найдена, возвращаем корзину.
 			# Если нет, создаем её.
 			if not cart:

@@ -87,16 +87,17 @@
                                         <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link cart-link"><i
                                                 class='bx bx-exit'></i></a>
                                         </li>
-                                    {% else %}
-                                    <li class="nav-item"><a href="{% url 'login' %}" class="nav-link cart-link"><i
-                                            class='bx bx-user'></i></a>
-                                    {% endif %}
                                     <li class="nav-item dropdown dropdown-large">
                                         <a href="{% url 'cart' %}"
                                            class="nav-link position-relative cart-link"> <span class="alert-count">{{ cart.products.count }}</span>
                                             <i class='bx bx-cart'></i>
                                         </a>
                                     </li>
+                                    {% else %}
+                                    <li class="nav-item"><a href="{% url 'login' %}" class="nav-link cart-link"><i
+                                            class='bx bx-user'></i></a>
+                                    {% endif %}
+
                                 </ul>
                             </nav>
                         </div>
