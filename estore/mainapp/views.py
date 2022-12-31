@@ -81,9 +81,10 @@ class AddToCartView(CartMixin, View):
 		}
 		if request.user.is_authenticated:
 			data.update({'user': self.cart.owner})
+			cart_product, created = CartProduct.objects.get_or_create(**data)
 		else:
 			data.update({'session_key': request.session.session_key})
-		cart_product, created = CartProduct.objects.get_or_create(**data)
+			cart_product, created = CartProduct.objects.get_or_create(**data)
 		if created:
 			self.cart.products.add(cart_product)
 		recalc_cart(self.cart)

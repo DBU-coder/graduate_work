@@ -49,7 +49,7 @@ class CartMixin(View):
 	# метод имеет доступ к request из которого берем user
 	def dispatch(self, request, *args, **kwargs):
 		cart = None
-		if request.user.is_authenticated and request.user.is_superuser:
+		if request.user.is_authenticated and not request.user.is_superuser:
 			# Если авторизован, ищем покупателя
 			customer = Customer.objects.filter(user=request.user).first()
 
